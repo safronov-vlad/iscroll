@@ -1,0 +1,29 @@
+.iscroll-item {
+    width: 100%;
+    min-height: 100vh;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    float: left;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+.iscroll-item .paralaxed {
+	position: relative;
+}
+.iscroll-item .fogged {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: #333;
+    pointer-events: none;
+}
+.iscroll-wrap {
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
