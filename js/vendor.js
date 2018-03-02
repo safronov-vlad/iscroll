@@ -73,6 +73,7 @@ $(document).ready(function(){
                 change_color: false, // вкл смена цвета
                 paralax_fogging: true, // вкл паралакс
                 maximum_opacity: .5, //максимальный % затемнения ( от 0 до 1 )
+                maximum_paralax: .33, //максимальный % затемнения ( от 0 до 1 )
             }
             one_percent = params.windowH / 100
             $(e).wrap('<div class="wrap"></div>')
@@ -201,12 +202,12 @@ $(document).ready(function(){
                     if ($(e + ' > section.active').next()[0]) {
                         if ($(e + ' > section.active').offset().top > 0) {
                             $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
-                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + 0.3 * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
+                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + params.maximum_paralax * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
                         }
                         else if ($(e + ' > section.active').offset().top < 0) {
                             if (( $(e + ' > section.active').offset().top + ( $(e + ' > section.active').height() - params.windowH ) ) < 0) {
                                 $(e + ' > section.active').find('.fogged').css({'opacity': (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_opacity) / 100})
-                                $(e + ' > section.active').find('.paralaxed').css('transform', 'translateY(' + (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * 0.3) + '%)')
+                                $(e + ' > section.active').find('.paralaxed').css('transform', 'translateY(' + (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_paralax) + '%)')
                             }
                             else {
                                 $(e + ' > section.active').find('.fogged').css({'opacity': 0})
@@ -221,7 +222,7 @@ $(document).ready(function(){
                     else{
                         if ($(e + ' > section.active').offset().top > 0) {
                             $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
-                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + 0.3 * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
+                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + params.maximum_paralax * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
                         }
                     }
                 }
