@@ -55,6 +55,7 @@ $(document).ready(function(){
                 }
             }, true)
         }
+        $($('.slick > .slick__item')[0]).addClass('slick-active')
     }
     else {
         iscroll = function (e) {
@@ -66,13 +67,13 @@ $(document).ready(function(){
                 color_speed: 500, // скорость смены цвета
                 change_color: false, // вкл смена цвета
                 paralax_fogging: true, // вкл паралакс
-                paralax_percent: .33, //максимальный % затемнения ( от 0 до 1 )
+                paralax_percent: .33, //максимальный % паралакса ( от 0 до 1 )
                 maximum_opacity: .5, //максимальный % затемнения ( от 0 до 1 )
             }
             one_percent = params.windowH / 100
             //выставление параметров при загрузке страницы
             $($(e + ' > section')[0]).addClass('active')
-            $($('.header_fixed__top_bar li')[0]).addClass('active')
+            $(e).css({'float':'left','width':'100%'})
             for (i = 0; i < $(e + ' > section').length; i++) {
                 $($(e + ' > section')[i]).html('<div class="paralaxed">' + $($(e + ' > section')[i]).html() + '</div>')
                 $($(e + ' > section')[i]).attr('data-id', i)
@@ -86,7 +87,6 @@ $(document).ready(function(){
                     }
                 }
             }
-            $(e).wrap('<div class="iscroll-wrap"></div>')
             $(e + ' > section[data-color]').css('background', $($(e + ' > section[data-color]')[0]).data('color'))
             flag = false
             curr_position = 0
@@ -101,14 +101,14 @@ $(document).ready(function(){
                         }
                         else {
                             disableScroll()
-                            $.when($('.iscroll-wrap').animate({scrollTop: len}, params.speed)).then(function () {
+                            $.when($('html').animate({scrollTop: len}, params.speed)).then(function () {
                                 enableScroll();
                                 return
                             })
                         }
                     }
                 }
-                else {
+                else {	
                     //если видно следующий блок, делаем так чтобы видно не было
                     if ($(e + ' > section.active').next()[0]) {
                         //фиксирование расширенного блока: true = низ блока / else = верх блока
@@ -120,7 +120,7 @@ $(document).ready(function(){
                                 }
                                 else {
                                     disableScroll()
-                                    $.when($('.iscroll-wrap').animate({scrollTop: len + $(e + ' > section.active').height() - params.windowH}, params.speed)).then(function () {
+                                    $.when($('html').animate({scrollTop: len + $(e + ' > section.active').height() - params.windowH}, params.speed)).then(function () {
                                         enableScroll();
                                         return
                                     })
@@ -135,7 +135,7 @@ $(document).ready(function(){
                                 }
                                 else {
                                     disableScroll()
-                                    $.when($('.iscroll-wrap').animate({scrollTop: len}, params.speed)).then(function () {
+                                    $.when($('html').animate({scrollTop: len}, params.speed)).then(function () {
                                         enableScroll();
                                         return
                                     })
@@ -153,7 +153,7 @@ $(document).ready(function(){
                                 }
                                 else {
                                     disableScroll()
-                                    $.when($('.iscroll-wrap').animate({scrollTop: len}, params.speed)).then(function () {
+                                    $.when($('html').animate({scrollTop: len}, params.speed)).then(function () {
                                         enableScroll();
                                         return
                                     })
@@ -166,8 +166,8 @@ $(document).ready(function(){
 
             //проверка что прокрутка еще идет
             check_scroll = function () {
-                if (curr_position != $('.iscroll-wrap').scrollTop()) {
-                    curr_position = $('.iscroll-wrap').scrollTop()
+                if (curr_position != $('html').scrollTop()) {
+                    curr_position = $('html').scrollTop()
                     setTimeout(function () {
                         check_scroll()
                     }, params.scroll_to_delay)
@@ -181,46 +181,22 @@ $(document).ready(function(){
             //обраобтичк прокрутки
             document.addEventListener('scroll', function (event) {
                 //переключение авктивного блока
-                if ($(e + ' > section.active').offset().top < -(($(e + ' > section.active').height() - params.windowH) + params.windowH / 2 )) {
+                if ($('html').scrollTop() > ($(e + ' > section.active').offset().top + $(e + ' > section.active').height() ) - params.windowH / 2 ) {
                     $(e + ' > section.active').removeClass('active').next().addClass('active')
                     if ($(e + ' > section.active').data('color')) {
                         $(e + ' > section[data-color]').css('background', $(e + ' > section.active').data('color'))
                     }
                 }
-                else if ($(e + ' > section.active').offset().top > params.windowH / 2) {
+                else if ($('html').scrollTop() < ($(e + ' > section.active').offset().top - params.windowH / 2 )) {
                     $(e + ' > section.active').removeClass('active').prev().addClass('active');
                     if ($(e + ' > section.active').data('color')) {
                         $(e + ' > section[data-color]').css('background', $(e + ' > section.active').data('color'))
                     }
                 }
                 //паралкс + затемнение
+
                 if (params.paralax_fogging) {
-                    if ($(e + ' > section.active').next()[0]) {
-                        if ($(e + ' > section.active').offset().top > 0) {
-                            $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
-                            $(e + ' > section.active').prev().find('.paralaxed').stop().animate({'top': params.paralax_percent * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + 'vh'}, 0)
-                        }
-                        else if ($(e + ' > section.active').offset().top < 0) {
-                            if (( $(e + ' > section.active').offset().top + ( $(e + ' > section.active').height() - params.windowH ) ) < 0) {
-                                $(e + ' > section.active').find('.fogged').css({'opacity': (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_opacity) / 100})
-                                $(e + ' > section.active').find('.paralaxed').stop().animate({'top': (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.paralax_percent) + 'vh'}, 0)
-                            }
-                            else {
-                                $(e + ' > section.active').find('.fogged').css({'opacity': 0})
-                                $(e + ' > section.active').find('.paralaxed').css({'top': '0vh'})
-                            }
-                        }
-                        else {
-                            $(e + ' > section.active').find('.fogged').css({'opacity': 0})
-                            $(e + ' > section.active').find('.paralaxed').css({'top': '0vh'})
-                        }
-                    }
-                    else{
-                        if ($(e + ' > section.active').offset().top > 0) {
-                            $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
-                            $(e + ' > section.active').prev().find('.paralaxed').stop().animate({'top': params.paralax_percent * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + 'vh'}, 0)
-                        }
-                    }
+
                 }
                 //прилипалка
                 if (!flag) {
@@ -233,6 +209,6 @@ $(document).ready(function(){
     $(window).resize(function(){
         params.windowH = $(window).height()
     })
-    iscroll('.container')
+    iscroll('body')
 
 })
