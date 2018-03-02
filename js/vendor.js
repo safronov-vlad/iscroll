@@ -33,6 +33,7 @@ $(document).ready(function(){
         window.ontouchmove = null;
         document.onkeydown = null;
     }
+/*
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         iscroll = function(e){
             params = {
@@ -61,6 +62,7 @@ $(document).ready(function(){
         $($('.slick > .slick__item')[0]).addClass('slick-active')
     }
     else {
+*/
         iscroll = function (e) {
             //параметры
             params = {
@@ -230,6 +232,6 @@ $(document).ready(function(){
                 }
             }, true)
         }
-    }
+//     }
     iscroll('.container')
 })
