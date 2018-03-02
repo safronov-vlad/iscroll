@@ -188,12 +188,12 @@ a {
     transition: all .3s ease
 }
 
-.paralaxed > section {
+section section {
     width: 100%;
-    min-height: 100vh;
+    min-height: 40vh;
+    line-height: 40vh
     text-align: center;
-    line-height: 100vh;
-    font-size: 150px
+    font-size: 50px
 }
 
 .fogged {

@@ -83,6 +83,7 @@ $(document).ready(function(){
             for (i = 0; i < $(e + ' > section').length; i++) {
                 $($(e + ' > section')[i]).attr('data-id', i)
                 if (!$($(e + ' > section')[i]).attr('data-color')) {
+	                $($(e + ' > section')[i]).html('<div class="paralaxed">' + $($(e + ' > section')[i]).html() + '</div>')
                     $($(e + ' > section')[i]).append('<div class="fogged"></div>')
                 }
                 else if ($($(e + ' > section')[i]).attr('data-color')) {
