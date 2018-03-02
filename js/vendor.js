@@ -33,7 +33,6 @@ $(document).ready(function(){
         window.ontouchmove = null;
         document.onkeydown = null;
     }
-/*
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         iscroll = function(e){
             params = {
@@ -56,30 +55,30 @@ $(document).ready(function(){
                 }
             }, true)
         }
+        $(window).resize(function(){
+            params.windowH = $(window).height()
+        })
         $($('.slick > .slick__item')[0]).addClass('slick-active')
     }
     else {
-*/
         iscroll = function (e) {
             //параметры
             params = {
-                windowH: $(window).height(), // высота окна
+                windowH: $(window).height(), // ширина окна
                 scroll_to_delay: 250, // делей срабатывания прилипания
                 speed: 250, // скорость прилипания
                 color_speed: 500, // скорость смены цвета
                 change_color: false, // вкл смена цвета
                 paralax_fogging: true, // вкл паралакс
-                paralax_percent: .33, //максимальный % паралакса ( от 0 до 1 )
                 maximum_opacity: .5, //максимальный % затемнения ( от 0 до 1 )
             }
             one_percent = params.windowH / 100
+            $(e).wrap('<div class="wrap"></div>')
             //выставление параметров при загрузке страницы
             $($(e + ' > section')[0]).addClass('active')
-            $(e).css({'float':'left','width':'100%'})
+            $($('.header_fixed__top_bar li')[0]).addClass('active')
             for (i = 0; i < $(e + ' > section').length; i++) {
-                $($(e + ' > section')[i]).html('<div class="paralaxed">' + $($(e + ' > section')[i]).html() + '</div>')
                 $($(e + ' > section')[i]).attr('data-id', i)
-                $($(e + ' > section')[i]).addClass('iscroll-item')
                 if (!$($(e + ' > section')[i]).attr('data-color')) {
                     $($(e + ' > section')[i]).append('<div class="fogged"></div>')
                 }
@@ -95,22 +94,22 @@ $(document).ready(function(){
             //функция прокрутки
             move = function () {
                 //фиксирование стандартного блока
-                if ($(e + ' > section.active').height() == params.windowH){
+                if ($(e + ' > section.active').height() == params.windowH) {
                     len = 0
                     for (i = 0; i < $(e + ' > section').length; i++) {
                         if (!$($(e + ' > section')[i]).hasClass('active')) {
-                            len += $($(e + ' > section')[i]).height();
+                            len += $($(e + ' > section')[i]).height()
                         }
                         else {
                             disableScroll()
-                            $.when($('html').animate({scrollTop: len}, params.speed)).then(function () {
+                            $.when($('.wrap').animate({scrollTop: len}, params.speed)).then(function () {
                                 enableScroll();
                                 return
                             })
                         }
                     }
                 }
-                else {	
+                else {
                     //если видно следующий блок, делаем так чтобы видно не было
                     if ($(e + ' > section.active').next()[0]) {
                         //фиксирование расширенного блока: true = низ блока / else = верх блока
@@ -122,7 +121,7 @@ $(document).ready(function(){
                                 }
                                 else {
                                     disableScroll()
-                                    $.when($('html').animate({scrollTop: len + $(e + ' > section.active').height() - params.windowH}, params.speed)).then(function () {
+                                    $.when($('.wrap').animate({scrollTop: len + $(e + ' > section.active').height() - params.windowH}, params.speed)).then(function () {
                                         enableScroll();
                                         return
                                     })
@@ -137,7 +136,7 @@ $(document).ready(function(){
                                 }
                                 else {
                                     disableScroll()
-                                    $.when($('html').animate({scrollTop: len}, params.speed)).then(function () {
+                                    $.when($('.wrap').animate({scrollTop: len}, params.speed)).then(function () {
                                         enableScroll();
                                         return
                                     })
@@ -155,7 +154,7 @@ $(document).ready(function(){
                                 }
                                 else {
                                     disableScroll()
-                                    $.when($('html').animate({scrollTop: len}, params.speed)).then(function () {
+                                    $.when($('.wrap').animate({scrollTop: len}, params.speed)).then(function () {
                                         enableScroll();
                                         return
                                     })
@@ -168,8 +167,8 @@ $(document).ready(function(){
 
             //проверка что прокрутка еще идет
             check_scroll = function () {
-                if (curr_position != $('html').scrollTop()) {
-                    curr_position = $('html').scrollTop()
+                if (curr_position != $('.wrap').scrollTop()) {
+                    curr_position = $('.wrap').scrollTop()
                     setTimeout(function () {
                         check_scroll()
                     }, params.scroll_to_delay)
@@ -183,22 +182,46 @@ $(document).ready(function(){
             //обраобтичк прокрутки
             document.addEventListener('scroll', function (event) {
                 //переключение авктивного блока
-                if ($('html').scrollTop() > ($(e + ' > section.active').offset().top + $(e + ' > section.active').height() ) - params.windowH / 2 ) {
+                if ($(e + ' > section.active').offset().top < -(($(e + ' > section.active').height() - params.windowH) + params.windowH / 2 )) {
                     $(e + ' > section.active').removeClass('active').next().addClass('active')
                     if ($(e + ' > section.active').data('color')) {
                         $(e + ' > section[data-color]').css('background', $(e + ' > section.active').data('color'))
                     }
                 }
-                else if ($('html').scrollTop() < ($(e + ' > section.active').offset().top - params.windowH / 2 )) {
+                else if ($(e + ' > section.active').offset().top > params.windowH / 2) {
                     $(e + ' > section.active').removeClass('active').prev().addClass('active');
                     if ($(e + ' > section.active').data('color')) {
                         $(e + ' > section[data-color]').css('background', $(e + ' > section.active').data('color'))
                     }
                 }
                 //паралкс + затемнение
-
                 if (params.paralax_fogging) {
-
+                    if ($(e + ' > section.active').next()[0]) {
+                        if ($(e + ' > section.active').offset().top > 0) {
+                            $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
+                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + 0.3 * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
+                        }
+                        else if ($(e + ' > section.active').offset().top < 0) {
+                            if (( $(e + ' > section.active').offset().top + ( $(e + ' > section.active').height() - params.windowH ) ) < 0) {
+                                $(e + ' > section.active').find('.fogged').css({'opacity': (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_opacity) / 100})
+                                $(e + ' > section.active').find('.paralaxed').css('transform', 'translateY(' + (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * 0.3) + '%)')
+                            }
+                            else {
+                                $(e + ' > section.active').find('.fogged').css({'opacity': 0})
+                                $(e + ' > section.active').find('.paralaxed').css({'transform': 'translateY(0%)'})
+                            }
+                        }
+                        else {
+                            $(e + ' > section.active').find('.fogged').css({'opacity': 0})
+                            $(e + ' > section.active').find('.paralaxed').css({'transform': 'translateY(0%)'})
+                        }
+                    }
+                    else{
+                        if ($(e + ' > section.active').offset().top > 0) {
+                            $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
+                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + 0.3 * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
+                        }
+                    }
                 }
                 //прилипалка
                 if (!flag) {
@@ -207,10 +230,6 @@ $(document).ready(function(){
                 }
             }, true)
         }
-//     }
-    $(window).resize(function(){
-        params.windowH = $(window).height()
-    })
-    iscroll('body')
-
+    }
+    iscroll('.container')
 })
