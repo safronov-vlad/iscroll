@@ -202,12 +202,12 @@ $(document).ready(function(){
                     if ($(e + ' > section.active').next()[0]) {
                         if ($(e + ' > section.active').offset().top > 0) {
                             $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
-                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + params.maximum_paralax * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
+                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + params.maximum_paralax * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + 'vh)')
                         }
                         else if ($(e + ' > section.active').offset().top < 0) {
                             if (( $(e + ' > section.active').offset().top + ( $(e + ' > section.active').height() - params.windowH ) ) < 0) {
                                 $(e + ' > section.active').find('.fogged').css({'opacity': (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_opacity) / 100})
-                                $(e + ' > section.active').find('.paralaxed').css('transform', 'translateY(' + (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_paralax) + '%)')
+                                $(e + ' > section.active').find('.paralaxed').css('transform', 'translateY(' + (( -( $(e + ' > section.active').height() - params.windowH + $(e + ' > section.active').offset().top ) / one_percent ) * params.maximum_paralax) + 'vh)')
                             }
                             else {
                                 $(e + ' > section.active').find('.fogged').css({'opacity': 0})
@@ -222,7 +222,7 @@ $(document).ready(function(){
                     else{
                         if ($(e + ' > section.active').offset().top > 0) {
                             $(e + ' > section.active').prev().find('.fogged').css({'opacity': params.maximum_opacity * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) / 100})
-                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + params.maximum_paralax * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + '%)')
+                            $(e + ' > section.active').prev().find('.paralaxed').css('transform', 'translateY(' + params.maximum_paralax * ( ( params.windowH - $(e + ' > section.active').offset().top ) / one_percent ) + 'vh)')
                         }
                     }
                 }
